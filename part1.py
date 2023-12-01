@@ -127,6 +127,8 @@ class Game():
         SPEED = 0.15     #speed of snake updates (sec)
         while self.gameNotOver:
             #complete the method implementation below
+            self.move() # Call to move in a certain direction
+            time.sleep(SPEED) # time delay
             pass #remove this line from your implemenation
 
     def whenAnArrowKeyIsPressed(self, e) -> None:
