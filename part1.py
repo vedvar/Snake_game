@@ -184,7 +184,8 @@ class Game():
         lastX, lastY = self.snakeCoordinates[-1]
         #complete the method implementation below
         movementDistance = 10 # how much the the snake moves by, makes it go faster
-
+        
+        #return tuples
         if(self.direction == "Left"):
             return lastX - movementDistance, lastY
         
