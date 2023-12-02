@@ -129,6 +129,7 @@ class Game():
             #complete the method implementation below
             self.move() # Call to move in a certain direction
             time.sleep(SPEED) # time delay
+            self.queue.put({"move": self.snakeCoordinates})
             pass #remove this line from your implemenation
 
     def whenAnArrowKeyIsPressed(self, e) -> None:
@@ -204,8 +205,10 @@ class Game():
         #complete the method implementation below
         x_cord = random.randrange(THRESHOLD, WINDOW_WIDTH - THRESHOLD) # might need to change this
         y_cord = random.randrange(THRESHOLD, WINDOW_WIDTH - THRESHOLD) # might need to change this
+        self.rectangleCoordinates = x_cord, y_cord
 
         self.queue.put({"prey": (x_cord - 5, y_cord - 5, x_cord + 5, y_cord + 5)})
+        #print(self.queue)
 
 
 if __name__ == "__main__":
