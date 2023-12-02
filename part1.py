@@ -202,6 +202,10 @@ class Game():
         """
         THRESHOLD = 15   #sets how close prey can be to borders
         #complete the method implementation below
+        x_cord = random.randrange(THRESHOLD, WINDOW_WIDTH - THRESHOLD) # might need to change this
+        y_cord = random.randrange(THRESHOLD, WINDOW_WIDTH - THRESHOLD) # might need to change this
+
+        self.queue.put({"prey": (x_cord - 5, y_cord - 5, x_cord + 5, y_cord + 5)})
 
 
 if __name__ == "__main__":
