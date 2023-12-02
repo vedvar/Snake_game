@@ -164,6 +164,12 @@ class Game():
         """
         NewSnakeCoordinates = self.calculateNewCoordinates()
         #complete the method implementation below
+        # add new coordinate to list
+        self.snakeCoordinates.append(NewSnakeCoordinates)
+        # remove first coordinate in list
+        self.snakeCoordinates.pop(0)
+        # check if game is over
+        self.isGameOver(NewSnakeCoordinates)
 
 
     def calculateNewCoordinates(self) -> tuple:
@@ -177,6 +183,19 @@ class Game():
         """
         lastX, lastY = self.snakeCoordinates[-1]
         #complete the method implementation below
+        movementDistance = 10 # how much the the snake moves by, makes it go faster
+
+        if(self.direction == "Left"):
+            return lastX - movementDistance, lastY
+        
+        if(self.direction == "Right"):
+            return lastX + movementDistance, lastY
+        
+        if(self.direction == "Up"):
+            return lastX, lastY - movementDistance
+        
+        if(self.direction == "Down"):
+            return lastX, lastY + movementDistance
 
 
     def isGameOver(self, snakeCoordinates) -> None:
@@ -203,8 +222,8 @@ class Game():
         """
         THRESHOLD = 15   #sets how close prey can be to borders
         #complete the method implementation below
-        x_cord = random.randrange(THRESHOLD, WINDOW_WIDTH - THRESHOLD) # might need to change this
-        y_cord = random.randrange(THRESHOLD, WINDOW_WIDTH - THRESHOLD) # might need to change this
+        x_cord = random.randrange(THRESHOLD, WINDOW_WIDTH - THRESHOLD, 10) # might need to change this
+        y_cord = random.randrange(THRESHOLD, WINDOW_WIDTH - THRESHOLD, 10) # might need to change this
         self.rectangleCoordinates = x_cord, y_cord
 
         self.queue.put({"prey": (x_cord - 5, y_cord - 5, x_cord + 5, y_cord + 5)})
