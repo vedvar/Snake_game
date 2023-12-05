@@ -11,6 +11,7 @@ import queue        #the thread-safe queue from Python standard library
 
 from tkinter import Tk, Canvas, Button
 import random, time
+from turtle import window_width
 
 class Gui():
     """
@@ -209,6 +210,14 @@ class Game():
         """
         x, y = snakeCoordinates
         #complete the method implementation below
+        if (x,y) in self.snakeCoordinates[:-1]: # check if snake bit itself
+            self.gameNotOver = False
+            self.queue.put({"game_over": True})
+
+        if x<=0 or x>=WINDOW_WIDTH or y<=0 or y>= WINDOW_HEIGHT: # check if snake went outside boundaries
+            self.gameNotOver = False
+            self.queue.put({"game_over": True})
+
 
     def createNewPrey(self) -> None:
         """ 
