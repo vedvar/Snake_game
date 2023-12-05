@@ -225,7 +225,9 @@ class Game():
         #complete the method implementation below
         x_cord = random.randrange(THRESHOLD, WINDOW_WIDTH - THRESHOLD, 10) # might need to change this
         y_cord = random.randrange(THRESHOLD, WINDOW_WIDTH - THRESHOLD, 10) # might need to change this
-        self.rectangleCoordinates = x_cord, y_cord
+
+        if (x_cord, y_cord) in self.snakeCoordinates: # if prey is in snake coordinates, make a new prey
+            self.createNewPrey()
 
         self.queue.put({"prey": (x_cord - 5, y_cord - 5, x_cord + 5, y_cord + 5)})
         #print(self.queue)
