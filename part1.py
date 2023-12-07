@@ -161,16 +161,32 @@ class Game():
             It also calls a corresponding method to check if 
             the game should be over. 
             The snake coordinates list (representing its length 
-            and position) should be correctly updated.
+            and cordition) should be correctly updated.
         """
         NewSnakeCoordinates = self.calculateNewCoordinates()
+        
         #complete the method implementation below
-        # add new coordinate to list
-        self.snakeCoordinates.append(NewSnakeCoordinates)
-        # remove first coordinate in list
-        self.snakeCoordinates.pop(0)
         # check if game is over
         self.isGameOver(NewSnakeCoordinates)
+        #check where head is
+        headx, heady = NewSnakeCoordinates
+        # add new coordinate to list
+        self.snakeCoordinates.append(NewSnakeCoordinates)
+        # make snake shorter by removing first coordinate in list
+        self.snakeCoordinates.pop(0)
+        
+
+        preyCoords = gui.canvas.coords(gui.preyIcon) # find where prey is
+        preyX1, preyY1, preyX2, preyY2 = preyCoords
+        
+        # Section of code that handles if the prey gets eaten
+        if (preyY1 <= heady <= preyY2 and preyX1 <= headx <= preyX2): 
+            self.snakeCoordinates.append(NewSnakeCoordinates)
+            self.score += 1
+            self.queue.put({"score": self.score})
+            self.createNewPrey()
+            
+
 
 
     def calculateNewCoordinates(self) -> tuple:
@@ -184,7 +200,7 @@ class Game():
         """
         lastX, lastY = self.snakeCoordinates[-1]
         #complete the method implementation below
-        movementDistance = 10 # how much the the snake moves by, makes it go faster
+        movementDistance = 10 # how much the the snake moves by, not speed but can make it go faster
         
         #return tuples
         if(self.direction == "Left"):
@@ -210,11 +226,14 @@ class Game():
         """
         x, y = snakeCoordinates
         #complete the method implementation below
+
+        # check if snake bit itself
         if (x,y) in self.snakeCoordinates[:-1]: # check if snake bit itself
             self.gameNotOver = False
             self.queue.put({"game_over": True})
 
-        if x<=0 or x>=WINDOW_WIDTH or y<=0 or y>= WINDOW_HEIGHT: # check if snake went outside boundaries
+        # check if snake touched edges
+        if x<=0 or x>=WINDOW_WIDTH or y<=0 or y>= WINDOW_HEIGHT: 
             self.gameNotOver = False
             self.queue.put({"game_over": True})
 
@@ -230,16 +249,22 @@ class Game():
             To make playing the game easier, set the x and y to be THRESHOLD
             away from the walls. 
         """
-        THRESHOLD = 15   #sets how close prey can be to borders
-        #complete the method implementation below
-        x_cord = random.randrange(THRESHOLD, WINDOW_WIDTH - THRESHOLD, 10) # might need to change this
-        y_cord = random.randrange(THRESHOLD, WINDOW_WIDTH - THRESHOLD, 10) # might need to change this
+        THRESHOLD = 30   #sets how close prey can be to borders, increased it to 30 due the centering happening in the lines below
+        
+        # Generate cords for new Prey
+        x_cord = random.randint(THRESHOLD, WINDOW_WIDTH-THRESHOLD)
+        x_cord = x_cord - (x_cord % 10) - 5 # this line helps to center the food with the head of the snake
 
-        if (x_cord, y_cord) in self.snakeCoordinates: # if prey is in snake coordinates, make a new prey
+        y_cord = random.randint(THRESHOLD, WINDOW_HEIGHT-THRESHOLD)
+        y_cord = y_cord - (y_cord % 10) - 5 # this line helps to center the food with the head of the snake
+
+
+        if (x_cord, y_cord) in self.snakeCoordinates: # If prey lands on snake's body, it will create a new prey
             self.createNewPrey()
 
+        
+        # Add prey task to queue
         self.queue.put({"prey": (x_cord - 5, y_cord - 5, x_cord + 5, y_cord + 5)})
-        #print(self.queue)
 
 
 if __name__ == "__main__":
